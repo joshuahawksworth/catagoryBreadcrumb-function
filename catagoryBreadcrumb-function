@@ -1,0 +1,83 @@
+<?php 
+
+function getCategory($id){
+    $data = [
+        [
+            "id" => 1,
+            "parent_id" => 0,
+            "name" => "Clothing"
+        ],
+        [
+            "id" => 2,
+            "parent_id" => 0,
+            "name" => "Accessories"
+        ],
+        [
+            "id" => 3,
+            "parent_id" => 0,
+            "name" => "Watches"
+        ],
+        [
+            "id" => 4,
+            "parent_id" => 1,
+            "name" => "Women"
+        ],
+        [
+            "id" => 5,
+            "parent_id" => 1,
+            "name" => "Men"
+        ],
+        [
+            "id" => 6,
+            "parent_id" => 4,
+            "name" => "Tops"
+        ],
+        [
+            "id" => 7,
+            "parent_id" => 4,
+            "name" => "Trousers"
+        ],
+        [
+            "id" => 8,
+            "parent_id" => 5,
+            "name" => "T-Shirts"
+        ]
+    ];
+
+    foreach($data as $d) {
+        if($d['id'] == $id) {
+             $item = $d;
+        }
+    }
+
+    return $item;
+}
+
+function categoryBreadcrumb($category_id, $separator){
+    $items_array = [];
+    $item = getCategory($category_id);
+    array_push($items_array, $item);
+
+    while($item["parent_id"] != 0){
+        $item = getCategory($item["parent_id"]);
+        array_push($items_array, $item);
+    }
+
+    $reversed = array_reverse($items_array);
+    $numItems = count($reversed);
+    $i = 0;
+    $output = "";
+
+    foreach($reversed as $item){
+        if(++$i === $numItems) {
+            $output .= $item["name"];
+        } else {
+            $output .= $item["name"] . " " . $separator . " ";
+        }
+    }
+
+    return $output;
+}
+
+print_r(categoryBreadcrumb(8,">"));
+?>
